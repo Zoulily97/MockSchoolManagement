@@ -1,0 +1,53 @@
+﻿@using MockSchoolManagement.Models.EnumTypes
+@model StudentCreateViewModel
+@inject IStudentRepository _studentRepository
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form asp-controller="Student" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" />
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" />
+    </div>
+    <div class="form-group">
+        <label>Major</label>
+        <select asp-for="Major" asp-items="Html.GetEnumSelectList(typeof(MajorEnum))"></select>
+    </div>
+    <div class="form-group">
+        <label>Student Count</label>
+        @_studentRepository.GetAllStudents().Count().ToString()
+    </div>
+    <div class="form-group row">
+        <label asp-for="Photos" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class=" custom-file">
+                <input asp-for="Photos" multiple class="form-control custom-file-input" />
+                <label class="custom-file-label">请选择图片</label>
+            </div>
+        </div>
+    </div>
+    <button type="submit">Create</button>
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $(".custom-file-input").on("change", function () {
+                    //console.log($(this)); //可以取消这里打印看看this中的值。
+                    var fileLabel = $(this).next(".custom-file-label");
+                    var files = $(this)[0].files;
+                    if (files.length > 1) {
+                        fileLabel.html("您已经选择了：" + files.length + " 个文件");
+                    } else if (files.length == 1) {
+                        fileLabel.html(files[0].name);
+                    }
+                });
+            });
+        </script>
+    }
+
+</form>
+
