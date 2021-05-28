@@ -20,4 +20,8 @@
     <ProjectReference Include="..\MockSchoolManagement.Infrastructure\MockSchoolManagement.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\1\" />
+  </ItemGroup>
+
 </Project>
