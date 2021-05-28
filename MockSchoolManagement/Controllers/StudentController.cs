@@ -59,7 +59,7 @@ namespace MockSchoolManagement.Controllers
                         //为了确保文件名是唯一的，我们在文件名后附加一个新的GUID值和一个下划线
                         uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
                         string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        //使用IFormFile接口提供的CopyTo()方法将文件复制到wwwroot/images/avatars文件夹
+                        //使用IFormFile接口提供的CopyTo()方法将文件复制到wwwroot/images文件夹
                         photo.CopyTo(new FileStream(filePath, FileMode.Create));
                     }
                 }
