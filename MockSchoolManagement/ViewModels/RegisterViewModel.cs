@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace MockSchoolManagement.ViewModels
     {
         [Required]
         [EmailAddress]
+        [Remote(action: "IsEmailInUse",controller:"Account")]
         [Display(Name ="邮箱地址")]
         public string Email { get; set; }
         [DataType(DataType.Password)]
@@ -19,6 +21,8 @@ namespace MockSchoolManagement.ViewModels
         [Display(Name ="确认密码")]
         [Compare("Password",ErrorMessage ="两次密码输入不一致，重新输入")]
         public string ConfirmPassword { get; set; }
+        [Display(Name = "居住城市")]
+        public string City { get; set; }
 
     }
 }

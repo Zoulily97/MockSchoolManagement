@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MockSchoolManagement.DataRepositories;
 using MockSchoolManagement.Infrastructure;
+using MockSchoolManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,21 +31,28 @@ namespace MockSchoolManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(
-                options=>options.UseSqlServer(_configuration.GetConnectionString("MockStudentDBConnection")));
-            services.AddControllersWithViews();
+                options => options.UseSqlServer(_configuration.GetConnectionString("MockStudentDBConnection")));
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                              .RequireAuthenticatedUser()
+                                              .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).AddXmlSerializerFormatters();
             services.AddScoped<IStudentRepository, SQLStudentRepository>();
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<AppDbContext>();
             services.Configure<IdentityOptions>(
-                options => {
+                options =>
+                {
                     options.Password.RequiredLength = 6;
                     options.Password.RequiredUniqueChars = 3;
                     options.Password.RequireUppercase = false;
-                    
+
                 });
-            
-            
-           
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

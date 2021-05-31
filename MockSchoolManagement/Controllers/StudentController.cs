@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MockSchoolManagement.DataRepositories;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MockSchoolManagement.Controllers
 {
+    [AllowAnonymous]
     public class StudentController : Controller
     {
         private readonly IStudentRepository _studentRepository;

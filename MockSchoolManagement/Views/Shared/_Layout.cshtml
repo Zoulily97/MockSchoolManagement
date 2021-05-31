@@ -10,7 +10,7 @@
 <body>
     <header>
         @using Microsoft.AspNetCore.Identity
-        @inject SignInManager<IdentityUser> _signInManager
+        @inject SignInManager<ApplicationUser> _signInManager
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MockSchoolManagement</a>
@@ -24,7 +24,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Create">Create</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Create">CreateStudent</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="CreateRole">CreateRole</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -69,6 +72,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
