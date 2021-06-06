@@ -67,8 +67,11 @@ namespace MockSchoolManagement
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+            //身份验证中间件
+            app.UseAuthentication();
 
             app.UseRouting();
+            //授权中间件
 
             app.UseAuthorization();
 

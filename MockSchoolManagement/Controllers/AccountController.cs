@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MockSchoolManagement.Controllers
 {
-   
+  
     public class AccountController : Controller
     {
         private UserManager<ApplicationUser> _userManager;
@@ -22,6 +22,10 @@ namespace MockSchoolManagement.Controllers
 
         }
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult AccessDenied()
         {
             return View();
         }
@@ -37,6 +41,7 @@ namespace MockSchoolManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                //将数据从RegisterViewModel 复制到IdentityUser
                 var user = new ApplicationUser
                 {
 
@@ -44,9 +49,15 @@ namespace MockSchoolManagement.Controllers
                     Email = model.Email,
                     City=model.City
                 };
+                //将用户数据存储在AspNetUsers数据表中
                 var result = await _userManager.CreateAsync(user, model.Password);
+                //如果成功创建成功，
                 if (result.Succeeded)
-                {
+                {  //用户已登录且为Admin,则是管理员在创建用户重定向到admin/listusers
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Admin");
+                    }
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "Home");
 

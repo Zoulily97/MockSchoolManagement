@@ -29,6 +29,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="CreateRole">CreateRole</a>
                         </li>
+                        @if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                    管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Admin" asp-action="ListRoles">ListRoles</a>
+                                    <a class="dropdown-item" asp-controller="Admin" asp-action="ListUsers">ListUsers</a>                   
+                                </div>
+                            </li>
+
+                           
+                        }
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @*如果用户已登录，显示注销链接*@
@@ -75,5 +89,6 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
