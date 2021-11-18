@@ -3,9 +3,9 @@ using MockSchoolManagement;
 
 namespace MockSchoolManagement.Infrastructure
 {
-    public class AppDbContext
-    {
+    //public class AppDbContext
+    //{
        
 
-    }
+    //}
 }

@@ -32,6 +32,7 @@ namespace MockSchoolManagement
         {
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_configuration.GetConnectionString("MockStudentDBConnection")));
+            //全局使用authorize授权
             services.AddControllersWithViews(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -39,7 +40,9 @@ namespace MockSchoolManagement
                                               .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).AddXmlSerializerFormatters();
+
             services.AddScoped<IStudentRepository, SQLStudentRepository>();
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<AppDbContext>();
             services.Configure<IdentityOptions>(
@@ -62,17 +65,23 @@ namespace MockSchoolManagement
             {
                 app.UseDeveloperExceptionPage();
             }
+            //否则显示友好的错误页面
+            else if  (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
+            {
+                app.UseExceptionHandler("/Error");
+            }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+
             //身份验证中间件
             app.UseAuthentication();
 
             app.UseRouting();
-            //授权中间件
 
+            //授权中间件
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

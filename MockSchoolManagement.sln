@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSchoolManagement.Applic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSchoolManagement.Domain", "MockSchoolManagement.DAL\MockSchoolManagement.Domain.csproj", "{78A5800C-47AD-4D1A-A821-A886D0C65850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSchoolManagement.Infrastructure", "MockSchoolManagement.Infrastructure\MockSchoolManagement.Infrastructure.csproj", "{0DD7B92F-1103-4546-940C-81F976DB151D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSchoolManagement.Infrastructure", "MockSchoolManagement.Infrastructure\MockSchoolManagement.Infrastructure.csproj", "{0DD7B92F-1103-4546-940C-81F976DB151D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,6 +12,6 @@ namespace MockSchoolManagement.Models
         public string Name { get; set; }
         public MajorEnum Major { get; set; }
         public string Email { get; set; }
-        public string PhotoPath { get; set; }
+        public string ? PhotoPath { get; set; }
     }
 }
