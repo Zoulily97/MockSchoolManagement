@@ -16,12 +16,16 @@ namespace MockSchoolManagement.Controllers
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;          
         private readonly ILogger<AdminController> _logger;
-        public AdminController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager,ILogger<AdminController> logger)
+        public AdminController(
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<ApplicationUser> userManager,
+            ILogger<AdminController> logger)
+        
         {
             this._roleManager = roleManager;
-            _userManager = userManager;
+           this. _userManager = userManager;
             _logger = logger;
         }
 
@@ -337,6 +341,69 @@ namespace MockSchoolManagement.Controllers
                 return View(model);
             }
         }
+        [HttpGet]
+      public async Task<IActionResult>  ManageUserRoles(string userId)
+        {
+            ViewBag.userId = userId;
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user==null)
+            {
+                ViewBag.ErrorMessage = $"用户Id={userId}的信息不存在，请重试";
+                return View("NotFound");
+            }
+            var model = new List<RolesInUserViewModel>();
+            foreach (var role in _roleManager.Roles)
+            {
+                var roleInUserViewModel = new RolesInUserViewModel()
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+                if (await _userManager.IsInRoleAsync(user,role.Name))
+                {
+                    roleInUserViewModel.IsSelected = true;
+                }
+                else
+                {
+                    roleInUserViewModel.IsSelected = false;
+                }
+                model.Add(roleInUserViewModel);
+            }
+            //添加已有角色到视图模型
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserRoles(List<RolesInUserViewModel> model, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"用户Id={userId}的信息不存在，请重试";
+                return View("NotFound");
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            //移除当前用户中的所有角色信息
+            var result = await _userManager.RemoveFromRolesAsync(user, roles);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "无法删除用户中的现有角色");
+                return View(model);
+            }
+            //查询出模型列表中被选中的rolename添加到用户中。
+            result = await _userManager.AddToRolesAsync(user,
+                model.Where(x => x.IsSelected).Select(y => y.RoleName));
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "无法向用户添加选定的角色");
+                return View(model);
+            }
+            return RedirectToAction("EditUser", new { Id = userId });
+
+
+        }
         #endregion
         #region 删除用户
         //[HttpGet]
@@ -370,5 +437,7 @@ namespace MockSchoolManagement.Controllers
 
         }
         #endregion
+
+
     }
 }

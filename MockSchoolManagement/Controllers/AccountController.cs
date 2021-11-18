@@ -54,7 +54,7 @@ namespace MockSchoolManagement.Controllers
                 //如果成功创建成功，
                 if (result.Succeeded)
                 {  //用户已登录且为Admin,则是管理员在创建用户重定向到admin/listusers
-                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    if (_signInManager.IsSignedIn(User) /*&& User.IsInRole("Admin")*/)
                     {
                         return RedirectToAction("ListUsers", "Admin");
                     }
