@@ -359,6 +359,7 @@ namespace MockSchoolManagement.Controllers
                     RoleId = role.Id,
                     RoleName = role.Name
                 };
+                //判断当前账户是否拥有该角色信息
                 if (await _userManager.IsInRoleAsync(user,role.Name))
                 {
                     roleInUserViewModel.IsSelected = true;
@@ -383,6 +384,13 @@ namespace MockSchoolManagement.Controllers
                 return View("NotFound");
             }
             var roles = await _userManager.GetRolesAsync(user);
+            //MARS
+            //var roles = await _roleManager.Roles.ToListAsync();
+            //foreach (var role in roles)
+            //{
+
+            //}
+
             //移除当前用户中的所有角色信息
             var result = await _userManager.RemoveFromRolesAsync(user, roles);
 
