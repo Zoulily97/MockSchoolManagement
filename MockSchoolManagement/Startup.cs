@@ -30,6 +30,16 @@ namespace MockSchoolManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //策略结合声明授权
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+                option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
+                //策略结合多个角色进行授权
+                option.AddPolicy("SuperAdminPolicy", policy => policy.RequireRole("Admin", "User", "SupperManager"));
+                option.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
+            }
+            );
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_configuration.GetConnectionString("MockStudentDBConnection")));
             //全局使用authorize授权
@@ -66,7 +76,7 @@ namespace MockSchoolManagement
                 app.UseDeveloperExceptionPage();
             }
             //否则显示友好的错误页面
-            else if  (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
+            else if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
             {
                 app.UseExceptionHandler("/Error");
             }

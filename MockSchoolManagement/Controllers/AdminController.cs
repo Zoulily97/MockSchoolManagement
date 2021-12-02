@@ -122,7 +122,7 @@ namespace MockSchoolManagement.Controllers
 
         #region 编辑角色
         [HttpGet]
-
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
