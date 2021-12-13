@@ -29,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Infrastructure\Repositories\" />
+    <Folder Include="Infrastructure\EntityMapper\" />
+    <Folder Include="Infrastructure\Dtos\" />
     <Folder Include="wwwroot\images\1\" />
   </ItemGroup>
 
