@@ -37,9 +37,27 @@ namespace MockSchoolManagement
                 option.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
                 //策略结合多个角色进行授权
                 option.AddPolicy("SuperAdminPolicy", policy => policy.RequireRole("Admin", "User", "SupperManager"));
-                option.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
+                option.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role","true"));
             }
             );
+
+            //         services.AddAuthorization(options =>
+            //         {
+            //             options.AddPolicy("EditRolePolicy", 
+            //                 policy => policy.RequireAssertion(context =>
+            //                 context.User.IsInRole("Admin") &&
+            //                 context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+            //                 context.User.IsInRole("Super Admin")
+            //));
+            //         });
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("EditRolePolicy", 
+            //        policy => policy.RequireClaim("Edit Role","true"));
+            //});
+
+
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_configuration.GetConnectionString("MockStudentDBConnection")));
             //全局使用authorize授权
@@ -100,6 +118,16 @@ namespace MockSchoolManagement
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+        }
+
+        //授权访问
+        private bool AuthorizeAccess(AuthorizationHandlerContext context)
+        {
+            return context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin");
         }
     }
 }

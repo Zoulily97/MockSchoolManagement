@@ -122,7 +122,7 @@ namespace MockSchoolManagement.Controllers
 
         #region 编辑角色
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]  //策略授权
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -310,8 +310,9 @@ namespace MockSchoolManagement.Controllers
                 Email = user.Email,
                 UserName = user.UserName,
                 City = user.City,
-                Claims = userClaims.Select(c => c.Value).ToList(),
-                Roles = userRoles
+               // Claims = userClaims.Select(c => c.Value).ToList(),
+                Roles = userRoles,
+                Claims=userClaims
 
             };
             return View(model);
@@ -468,8 +469,10 @@ namespace MockSchoolManagement.Controllers
                 return View(model);
             }
             //添加页面上选中的声明信息
+            //result = await _userManager.AddClaimsAsync(user,
+            //    model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));
             result = await _userManager.AddClaimsAsync(user,
-                model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));
+                model.Cliams.Select(c => new Claim(c.ClaimType,c.IsSelected ? "true": "false")));
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "无法向用户添加选定的声明");
