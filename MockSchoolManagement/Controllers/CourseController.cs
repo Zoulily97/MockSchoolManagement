@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MockSchoolManagement.Controllers
 {
-    public class CourseController1 : Controller
+    public class CourseController : Controller
     {
         public IActionResult Index()
         {
