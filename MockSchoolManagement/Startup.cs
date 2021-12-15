@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MockSchoolManagement.DataRepositories;
 using MockSchoolManagement.Infrastructure;
+using MockSchoolManagement.Infrastructure.Repositories;
 using MockSchoolManagement.Models;
 using System;
 using System.Collections.Generic;
@@ -81,6 +82,7 @@ namespace MockSchoolManagement
                     options.Password.RequireUppercase = false;
 
                 });
+            services .AddTransient(typeof(IRepository<,>),typeof(RepositoryBase<,>));
 
 
 
